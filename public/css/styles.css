@@ -1,3 +1,60 @@
 html {
-    background: red;
+    background-color: #EFEFEF;
+    font-size: 62.5%;
+}
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+main {
+
+}
+
+
+#gameWrapper {
+    width: 100%;
+    height: auto;
+    min-height: 50rem;
+
+    display: none;
+    background-color: rgba( 0,0,0,0.1 );
+    padding-top: 5rem;
+}
+
+
+.game-active #gameWrapper {
+    display: block;
+}
+
+
+#controllerWrapper {
+    width: 100%;
+    height: 100%;
+
+    display: none;
+    background-color: rgba( 0,0,0,0.1 );
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#controllerWrapper > *:first-child {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% ) rotate( 90deg );
+}
+
+
+.controller-active #controllerWrapper {
+    display: block;
 }

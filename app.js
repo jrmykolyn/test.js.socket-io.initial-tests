@@ -35,10 +35,13 @@ function handleRequest( req, res ) {
 // --------------------------------------------------
 io.on( 'connection', function( client ) {
     console.log( 'CONNECTED!' ); /// TEMP
+    console.log( client.id );
 
     clientCount++;
 
-    io.sockets.emit( 'client-joined', 'Total clients: ' + clientCount ); /// TEMP
+    client.emit( 'joined', { clientCount: clientCount } );
+
+    io.sockets.emit( 'client-joined', { clientCount: clientCount } ); /// TEMP
 
     client.on( 'event', function( data ) {
         console.log( 'EVENT!' );

@@ -8,24 +8,44 @@
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-    <main id="main"></main>
-    
+    <main id="main">
+        <section id="gameWrapper">
+            <!-- GAME MARKUP HERE -->
+        </section>
+        <section id="controllerWrapper">
+            <h2>CONTROLLER</h2>
+        </section>
+    </main>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         var socket = io('http://localhost:3000');
-        socket.on( 'connect', function() {
+
+        socket.on( 'connect', function( data ) {
             console.log( 'CONNECTED!' ); /// TEMP
+            console.log( data );
         } );
+
         socket.on( 'event', function( data ) {
             console.log( 'EVENT!' ); /// TEMP
             console.log( data ); /// TEMP
         } );
         
+        socket.on( 'joined', function( data ) {
+            console.log( 'joined!' ); /// TEMP
+            console.log( data ); /// TEMP
+
+            if ( data.clientCount === 1 ) {
+                document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'game-active' );
+            } else {
+                document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'controller-active' );
+            }
+        } );
+
         socket.on( 'client-joined', function( data ) {
-            console.log( 'CLIENT-JOINED!' ); /// TEMP
-            console.log( data );
-        })
-        
+            console.log( 'client-joined!' ); /// TEMP
+            console.log( data ); /// TEMP
+        } );
+
         socket.on( 'disconnect', function() {
             console.log( 'DISCONNECTED!' ); /// TEMP
         } );
