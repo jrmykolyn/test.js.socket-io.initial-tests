@@ -38,7 +38,7 @@ io.on( 'connection', function( client ) {
 
     clientCount++;
 
-    io.sockets.emit( 'client-joined', 'Total clients: ' + count ); /// TEMP
+    io.sockets.emit( 'client-joined', 'Total clients: ' + clientCount ); /// TEMP
 
     client.on( 'event', function( data ) {
         console.log( 'EVENT!' );
