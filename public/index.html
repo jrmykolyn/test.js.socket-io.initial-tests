@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test - JS - Socket.io - Initial Tests</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <main id="main"></main>
+    
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io('http://localhost:3000');
+        socket.on( 'connect', function() {
+            console.log( 'CONNECTED!' ); /// TEMP
+        } );
+        socket.on( 'event', function( data ) {
+            console.log( 'EVENT!' ); /// TEMP
+            console.log( data ); /// TEMP
+        } );
+        
+        socket.on( 'client-joined', function( data ) {
+            console.log( 'CLIENT-JOINED!' ); /// TEMP
+            console.log( data );
+        })
+        
+        socket.on( 'disconnect', function() {
+            console.log( 'DISCONNECTED!' ); /// TEMP
+        } );
+    </script>
+</body>
+</html>
