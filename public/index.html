@@ -73,6 +73,7 @@
 
         // ...
         socket.on( 'client-joined', function( data ) {
+            /// TODO: Wrap this in 'ifGame' (or similar).
             if ( data.playerIds && data.playerIds.length ) {
                 let existingPlayerIds = players.map( player => player.id );
                 let newPlayerIds = data.playerIds.filter( id => existingPlayerIds.indexOf( id ) === -1 );
