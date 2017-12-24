@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,26 +13,56 @@
             <!-- GAME MARKUP HERE -->
         </section>
         <section id="controllerWrapper">
-            <h2>CONTROLLER</h2>
+            <div class="controller">
+                <div class="controller-d-pad">
+                    <button id="up">Up</button>
+                    <button id="right">Right</button>
+                    <button id="down">Down</button>
+                    <button id="left">Left</button>
+                </div>
+            </div>
         </section>
     </main>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-        var socket = io('http://localhost:3000');
+        // Elems.
+        var gameWrapperElem = document.getElementById( 'gameWrapper' );
+        var controllerWrapperElem = document.getElementById( 'controllerWrapper' );
+        var buttonElems = controllerWrapperElem.querySelectorAll( 'button' );
 
+        // Data
+        var socket = io('http://localhost:3000');
+        var id = null;
+        var players = [];
+
+        // Register UI event listeners.
+        if ( buttonElems ) {
+            buttonElems.forEach( function( el ) {
+                el.addEventListener( 'click', function() {
+                    console.log( 'CLICKED BUTTON' );
+                    socket.emit( 'player-move', { playerId: id } );
+                } );
+            } );
+        }
+
+        // Register socket event listeners.
+        // ...
         socket.on( 'connect', function( data ) {
             console.log( 'CONNECTED!' ); /// TEMP
             console.log( data );
         } );
 
+        // ...
         socket.on( 'event', function( data ) {
             console.log( 'EVENT!' ); /// TEMP
             console.log( data ); /// TEMP
         } );
-        
+
+        // ...
         socket.on( 'joined', function( data ) {
-            console.log( 'joined!' ); /// TEMP
-            console.log( data ); /// TEMP
+            id = data.clientId;
+
+            document.body.setAttribute( 'data-client-id', id );
 
             if ( data.clientCount === 1 ) {
                 document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'game-active' );
@@ -41,11 +71,37 @@
             }
         } );
 
+        // ...
         socket.on( 'client-joined', function( data ) {
-            console.log( 'client-joined!' ); /// TEMP
-            console.log( data ); /// TEMP
+            if ( data.playerIds && data.playerIds.length ) {
+                let existingPlayerIds = players.map( player => player.id );
+                let newPlayerIds = data.playerIds.filter( id => existingPlayerIds.indexOf( id ) === -1 );
+
+                let newPlayerObjs = newPlayerIds.map( id => {
+                    return { id };
+                } ).map( obj => {
+                    obj.elem = document.createElement( 'div' );
+                    obj.elem.classList.add( 'player-elem' );
+                    obj.elem.setAttribute( 'id', obj.id );
+                    gameWrapperElem.appendChild( obj.elem );
+                } )
+
+                players.push( ...newPlayerObjs );
+            }
         } );
 
+        // ...
+        socket.on( 'player-moved', function( data ) {
+            // If the current client IS the game...
+            if ( data.gameId === id ) {
+                var el = document.getElementById( data.playerId );
+                var currLeft = parseInt( el.style.left );
+
+                el.style.left = isNaN( currLeft ) ? `${el.offsetWidth}px` : `${currLeft + el.offsetWidth}px`;
+            }
+        } );
+
+        // ...
         socket.on( 'disconnect', function() {
             console.log( 'DISCONNECTED!' ); /// TEMP
         } );

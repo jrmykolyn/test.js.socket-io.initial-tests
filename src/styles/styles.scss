@@ -1,3 +1,6 @@
+@import 'bourbon';
+@import 'sfco-sass-utils';
+
 html {
     background-color: #EFEFEF;
     font-size: 62.5%;
@@ -12,18 +15,17 @@ body {
 
 
 main {
-
+    padding: 2rem;
 }
 
-
 #gameWrapper {
-    width: 100%;
-    height: auto;
-    min-height: 50rem;
+    width: 50rem;
+    height: 50rem;
 
     display: none;
+    margin: 0 auto;
     background-color: rgba( 0,0,0,0.1 );
-    padding-top: 5rem;
+    position: relative;
 }
 
 
@@ -46,15 +48,25 @@ main {
     left: 0;
 }
 
-#controllerWrapper > *:first-child {
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate( -50%, -50% ) rotate( 90deg );
+.controller-active #controllerWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-
-.controller-active #controllerWrapper {
+.player-elem {
+    width: 2rem;
+    height: 2rem;
     display: block;
+    background: blue;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.controller {
+    width: 50vw;
+    height: 50vw;
+    display: block;
+    background: rgba( 0, 0, 0, 0.1 );
 }

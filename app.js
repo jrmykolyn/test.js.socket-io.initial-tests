@@ -12,6 +12,9 @@ var socketIo = require( 'socket.io' );
 var server = http.createServer( handleRequest );
 var io = socketIo( server );
 var clientCount = 0;
+var clientIds = [];
+var gameId = null;
+var playerIds = [];
 
 
 // --------------------------------------------------
@@ -38,10 +41,18 @@ io.on( 'connection', function( client ) {
     console.log( client.id );
 
     clientCount++;
+    clientIds.push( client.id );
 
-    client.emit( 'joined', { clientCount: clientCount } );
+    // Ensure that first client IS the game, subsequent clients are indiv. players.
+    if ( !gameId ) {
+        gameId = client.id;
+    } else {
+        playerIds.push( client.id );
+    }
 
-    io.sockets.emit( 'client-joined', { clientCount: clientCount } ); /// TEMP
+    client.emit( 'joined', { clientCount: clientCount, clientId: client.id } );
+
+    io.sockets.emit( 'client-joined', { clientCount: clientCount, playerIds, gameId } ); /// TEMP
 
     client.on( 'event', function( data ) {
         console.log( 'EVENT!' );
@@ -51,6 +62,10 @@ io.on( 'connection', function( client ) {
         console.log( 'DISCONNECTED!' );
 
         clientCount--;
+    } );
+
+    client.on( 'player-move', function( data ) {
+        io.sockets.emit( 'player-moved', Object.assign( data, { gameId } ) );
     } );
 } );
 
