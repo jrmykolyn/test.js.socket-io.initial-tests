@@ -15,10 +15,8 @@
         <section id="controllerWrapper">
             <div class="controller">
                 <div class="controller-d-pad">
-                    <button id="up">Up</button>
-                    <button id="right">Right</button>
-                    <button id="down">Down</button>
-                    <button id="left">Left</button>
+                    <button id="up" data-direction="up">Up</button>
+                    <button id="down" data-direction="down">Down</button>
                 </div>
             </div>
         </section>
@@ -40,7 +38,10 @@
             buttonElems.forEach( function( el ) {
                 el.addEventListener( 'click', function() {
                     console.log( 'CLICKED BUTTON' );
-                    socket.emit( 'player-move', { playerId: id } );
+                    socket.emit( 'player-move', {
+                        playerId: id,
+                        direction: el.getAttribute( 'data-direction' ),
+                    } );
                 } );
             } );
         }
@@ -93,12 +94,17 @@
 
         // ...
         socket.on( 'player-moved', function( data ) {
+            console.log( 'LOGGING OUT `data`' ); /// TEMP
+            console.log( data );
+
             // If the current client IS the game...
             if ( data.gameId === id ) {
                 var el = document.getElementById( data.playerId );
-                var currLeft = parseInt( el.style.left );
+                var currTop = parseInt( el.style.top );
 
-                el.style.left = isNaN( currLeft ) ? `${el.offsetWidth}px` : `${currLeft + el.offsetWidth}px`;
+                var modifier = data.direction === 'up' ? 1 : -1;
+
+                el.style.top = isNaN( currTop ) ? `${el.offsetHeight}px` : `${currTop + ( el.offsetHeight * modifier)}px`;
             }
         } );
 
