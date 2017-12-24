@@ -40,7 +40,10 @@ gulp.task( 'styles', function() {
         .pipe( sass(
             {
                 outputStyle: 'compressed',
-                includePaths: []
+                includePaths: [
+                    './node_modules/sfco-sass-utils/',
+                    './node_modules/bourbon/app/assets/stylesheets/'
+                ]
             }).on( 'error', sass.logError )
         )
         .pipe( gulp.dest( PATHS.styles.dest ) );
