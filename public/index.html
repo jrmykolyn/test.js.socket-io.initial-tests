@@ -102,7 +102,7 @@
                 var el = document.getElementById( data.playerId );
                 var currTop = parseInt( el.style.top );
 
-                var modifier = data.direction === 'up' ? 1 : -1;
+                var modifier = data.direction === 'up' ? -1 : 1;
 
                 el.style.top = isNaN( currTop ) ? `${el.offsetHeight}px` : `${currTop + ( el.offsetHeight * modifier)}px`;
             }
