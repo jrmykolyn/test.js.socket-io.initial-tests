@@ -75,6 +75,7 @@
         // ...
         socket.on( 'client-joined', function( data ) {
             /// TODO: Wrap this in 'ifGame' (or similar).
+            /// TODO: Enforce max. # of players.
             if ( data.playerIds && data.playerIds.length ) {
                 let existingPlayerIds = players.map( player => player.id );
                 let newPlayerIds = data.playerIds.filter( id => existingPlayerIds.indexOf( id ) === -1 );
@@ -86,7 +87,9 @@
                     obj.elem.classList.add( 'player-elem' );
                     obj.elem.setAttribute( 'id', obj.id );
                     gameWrapperElem.appendChild( obj.elem );
-                } )
+
+                    return obj;
+                } );
 
                 players.push( ...newPlayerObjs );
             }
