@@ -103,11 +103,15 @@
             // If the current client IS the game...
             if ( data.gameId === id ) {
                 var el = document.getElementById( data.playerId );
-                var currTop = parseInt( el.style.top );
-
+                var currTop = parseInt( el.style.top ) || 0;
                 var modifier = data.direction === 'up' ? -1 : 1;
 
-                el.style.top = isNaN( currTop ) ? `${el.offsetHeight}px` : `${currTop + ( el.offsetHeight * modifier)}px`;
+                /// TODO: Refactor.
+                if ( data.direction === 'up' && currTop > 0 ) {
+                    el.style.top = `${currTop + ( el.offsetHeight * modifier)}px`
+                } else if ( data.direction === 'down' && ( currTop + el.offsetHeight ) < gameWrapperElem.offsetHeight ) {
+                    el.style.top = `${currTop + ( el.offsetHeight * modifier)}px`
+                }
             }
         } );
 
