@@ -34,6 +34,7 @@
         var players = [];
 
         // Register UI event listeners.
+        /// TODO: Use other means of determining whether current window is controller or game.
         if ( buttonElems ) {
             buttonElems.forEach( function( el ) {
                 el.addEventListener( 'click', function() {
@@ -43,6 +44,15 @@
                         direction: el.getAttribute( 'data-direction' ),
                     } );
                 } );
+            } );
+
+            document.addEventListener( 'keydown', function( e ) {
+                if ( e.keyCode === 38 || e.keyCode === 40 ) {
+                    socket.emit( 'player-move', {
+                        playerId: id,
+                        direction: e.keyCode === 38 ? 'up' : 'down',
+                    } );
+                }
             } );
         }
 
